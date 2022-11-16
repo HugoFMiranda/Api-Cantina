@@ -23,7 +23,7 @@ console.log("Starting server...");
 // MongoDB connection
 require('dotenv').config();
 
-//MONGODB_DATABASE_URL = "mongodb+srv://hugo:zBQbish8GJx3GOzc@cantina.cj1agiv.mongodb.net/?retryWrites=true&w=majority"
+
 mongoose.connect(process.env.MONGODB_DATABASE_URL, { useNewUrlParser: true });
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));

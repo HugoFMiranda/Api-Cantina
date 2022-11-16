@@ -4,9 +4,10 @@ var router = express.Router();
 var Reserva = require('../models/reserva');
 
 require('dotenv').config();
-var porta_API = process.env.PORTA_API;
-var host_API = process.env.HOST_API;
-var url_API = process.env.URL_API;
+
+var porta_API = process.env.porta_API;
+var host_API = process.env.host_API;
+var url_API = "https://" + host_API + ":" + porta_API;
 
 var preco_reserva = 4;
 
@@ -52,7 +53,7 @@ router
                 });
             });
         } catch (err) {
-            return res.json({ message: 'Error', error: err });
+            res.json({ message: 'Error', error: err });
         }
     })
 
