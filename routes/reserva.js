@@ -64,15 +64,7 @@ router
     } catch (err) {
         return res.json({ message: 'Error', error: err });
     }
-    var reserva = new Reserva({
-        aluno: {
-            num_aluno: req.body.aluno.num_aluno,
-            nome_aluno: req.body.aluno.nome_aluno,
-            email_aluno: req.body.aluno.email_aluno
-        },
-        data: req.body.data,
-        pratoReservado: req.body.pratoReservado,
-    });
+
     try {
         var alunoT = {};
         client.registerMethod("jsonMethod", url_API + '/api/alunos', "GET");
@@ -94,17 +86,26 @@ router
                         headers: { "Content-Type": "application/json" },
                         data: { "id": req.body.aluno.num_aluno, "saldo": saldo, "nome": alunoT.nome, "email": alunoT.email, siglaCurso: alunoT.siglaCurso }
                     }, function(data, response) {
-                        console.log("Reserva efetuada com sucesso, saldo do aluno atualizado");
+                        console.log("Saldo do aluno atualizado");
                     });
                 }
             } else {
                 console.log("Aluno não encontrado");
             }
+            var reserva = new Reserva({
+                aluno: {
+                    num_aluno: req.body.aluno.num_aluno,
+                    nome_aluno: alunoT.nome,
+                    email_aluno: alunoT.email
+                },
+                data: req.body.data,
+                pratoReservado: req.body.pratoReservado,
+            });
             return reserva.save(function(err) {
                 if (err)
                     res.send(err);
                 res.status(200).json({
-                    message: 'Reserva efetuada com sucesso, saldo do aluno atualizado',
+                    message: 'Reserva efetuada com sucesso',
                     reserva: reserva
                 });
             });
