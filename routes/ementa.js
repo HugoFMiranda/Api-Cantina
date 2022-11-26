@@ -4,7 +4,7 @@ var router = express.Router();
 var Ementasemana = require('../models/ementasemana');
 
 router
-// GET all ementasemana
+// GET all ementasemana - http://localhost:3000/api/ementa
     .get('/', function(req, res, next) {
     Ementasemana.find(function(err, ementasemana) {
         if (err) return next({ message: "Erro ao obter ementas da semana", err: err });
@@ -12,9 +12,7 @@ router
     });
 })
 
-
-
-// POST ementasemana
+// POST ementasemana - http://localhost:3000/api/ementa
 .post('/', function(req, res, next) {
     Ementasemana.create(req.body, function(err, post) {
         if (err) {
@@ -24,7 +22,7 @@ router
     });
 });
 
-// GET ementasemana by id
+// GET ementasemana by id - http://localhost:3000/api/ementa/:id
 router
     .route('/:id')
     .get(function(req, res, next) {
@@ -34,7 +32,7 @@ router
         });
     })
 
-// PUT ementasemana
+// PUT ementasemana - http://localhost:3000/api/ementa/:id
 .put(function(req, res, next) {
     Ementasemana.findByIdAndUpdate(req.params.id, req.body, function(
         err,
@@ -45,7 +43,7 @@ router
     });
 })
 
-// DELETE ementasemana
+// DELETE ementasemana - http://localhost:3000/api/ementa/:id
 .delete(function(req, res, next) {
     Ementasemana.findByIdAndRemove(req.params.id, req.body, function(
         err,

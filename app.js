@@ -7,10 +7,12 @@ var mongoose = require('mongoose');
 var cors = require('cors');
 
 
+/* Importing the models from the models folder. */
 var pratodia = require('./models/pratododia');
 var ementasemana = require('./models/ementasemana');
 var reserva = require('./models/reserva');
 
+/* Importing the routes from the routes folder. */
 var indexRouter = require('./routes/index');
 var ementasemanaRouter = require('./routes/ementa');
 var pratododiaRouter = require('./routes/prato');
@@ -24,6 +26,7 @@ console.log("Starting server...");
 require('dotenv').config();
 
 
+/* Connecting to the MongoDB database. */
 mongoose.connect(process.env.MONGODB_DATABASE_URL, { useNewUrlParser: true });
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -44,6 +47,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+/* Defining the routes for the different pages. */
 app.use('/', indexRouter);
 app.use('/api/ementa', ementasemanaRouter);
 app.use('/api/prato', pratododiaRouter);

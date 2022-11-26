@@ -4,7 +4,7 @@ var router = express.Router();
 var Pratodia = require('../models/pratododia');
 
 router
-// GET all pratodia
+// GET all pratodia - http://localhost:3000/pratodia
     .get('/', function(req, res, next) {
     Pratodia.find(function(err, pratodia) {
         if (err) return next({ message: "Erro ao obter pratos do dia", err: err });
@@ -13,7 +13,7 @@ router
 })
 
 
-// POST pratodia
+// POST pratodia - http://localhost:3000/pratodia
 .post('/', function(req, res, next) {
     Pratodia.create(req.body, function(err, post) {
         if (err) return next({ message: "Erro ao criar prato do dia", err: err });
@@ -21,7 +21,7 @@ router
     });
 });
 
-// GET pratodia by id
+// GET pratodia by id - http://localhost:3000/pratodia/:id
 router
     .route('/:id')
     .get(function(req, res, next) {
@@ -31,7 +31,7 @@ router
         });
     })
 
-// PUT pratodia
+// PUT pratodia - http://localhost:3000/pratodia/:id
 .put(function(req, res, next) {
     Pratodia.findByIdAndUpdate(req.params.id, req.body, function(
         err,
@@ -42,7 +42,7 @@ router
     });
 })
 
-// DELETE pratodia
+// DELETE pratodia - http://localhost:3000/pratodia/:id
 .delete(function(req, res, next) {
     Pratodia.findByIdAndRemove(req.params.id, req.body, function(
         err,
