@@ -3,6 +3,9 @@ var Schema = mongoose.Schema;
 var Pratodia = require('./pratododia').schema;
 
 var ReservaSchema = new Schema({
+    id: {
+        type: Schema.Types.ObjectId
+    },
     data: {
         type: Date,
         default: Date.now

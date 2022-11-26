@@ -27,8 +27,6 @@ router
         });
     })
 
-
-
 // POST a reserva with data of aluno retrieved from external api using node-rest-client - http://localhost:3000/reservas
 .post('/', function(req, res, next) {
     try {
@@ -50,55 +48,57 @@ router
                     aluno_req = data[j];
                 }
             }
-            // update saldo
-            if (aluno_req != null) {
-                // subtract 4€ saldo of aluno retrieved from external api using node-rest-client
-                var saldo = (aluno_req.saldo != null) ? aluno_req.saldo : 0;
-                if (saldo < PRECO_RESERVA) {
-                    return res.json({ message: 'O aluno não tem saldo uficiente para efetuar uma reserva ', saldo: aluno_req.saldo });
-                } else {
-                    saldo = saldo - PRECO_RESERVA;
-                    client.registerMethod("jsonMethod", URL_API + '/api/alunos/' + req.body.num_aluno + '/saldo/debitar?valor=' + PRECO_RESERVA, "PUT");
-                    client.methods.jsonMethod({
-                        path: { "id": req.body.num_aluno },
-                        headers: { "Content-Type": "application/json" },
-                        data: { "id": req.body.num_aluno }
-                    }, function(data, response) {
-                        response.on('error', function(err) {
-                            return res.json({ message: 'Error', error: err });
-                        });
-                        console.log("Saldo do aluno atualizado");
-                    });
-                }
-            } else {
-                return res.json({ message: 'O aluno não existe' });
-            }
-            // find prato in mongoDB
-            var prato = Prato.findOne({
-                nome: req
-                    .body.prato
-            }, function(err, prato) {
-                if (err) return next({ message: "Erro ao obter prato", err: err });
-                if (prato == null) {
-                    return res.json({ message: 'O prato não existe' });
-                }
-                // create reserva
-                var reserva = new Reserva({
-                    aluno: {
-                        num_aluno: req.body.num_aluno,
-                        nome_aluno: aluno_req.nome,
-                        email_aluno: aluno_req.email
-                    },
-                    pratoReservado: prato,
-                    data: req.body.data,
-                });
-                // Saving the reservation in the database.
-                reserva.save(function(err, reserva) {
-                    if (err) return next({ message: "Erro ao criar reserva", err: err });
-                    res.json({ message: "Reserva criada com sucesso", reserva: reserva });
-                });
 
-            });
+            // find prato in mongoDB
+            if (req.body.id_prato != null) {
+                var prato = Prato.findOne({ _id: req.body.id_prato }, function(err, prato) {
+                    if (err) return res.json({ message: "Prato não econtrado" });
+                    if (prato == null) {
+                        return res.json({ message: 'O prato não existe' });
+                    }
+                    // update saldo
+                    if (aluno_req != null) {
+                        // subtract 4€ saldo of aluno retrieved from external api using node-rest-client
+                        var saldo = (aluno_req.saldo != null) ? aluno_req.saldo : 0;
+                        if (saldo < PRECO_RESERVA) {
+                            return res.json({ message: 'O aluno não tem saldo uficiente para efetuar uma reserva ', saldo: aluno_req.saldo });
+                        } else {
+                            saldo = saldo - PRECO_RESERVA;
+                            client.registerMethod("jsonMethod", URL_API + '/api/alunos/' + req.body.num_aluno + '/saldo/debitar?valor=' + PRECO_RESERVA, "PUT");
+                            client.methods.jsonMethod({
+                                path: { "id": req.body.num_aluno },
+                                headers: { "Content-Type": "application/json" },
+                                data: { "id": req.body.num_aluno }
+                            }, function(data, response) {
+                                response.on('error', function(err) {
+                                    return res.json({ message: 'Error', error: err });
+                                });
+                                console.log("Saldo do aluno atualizado");
+                            });
+                        }
+                    } else {
+                        return res.json({ message: 'O aluno não existe' });
+                    }
+                    // create reserva
+                    var reserva = new Reserva({
+                        aluno: {
+                            num_aluno: req.body.num_aluno,
+                            nome_aluno: aluno_req.nome,
+                            email_aluno: aluno_req.email
+                        },
+                        pratoReservado: prato,
+                        data: req.body.data,
+                    });
+                    // Saving the reservation in the database.
+                    reserva.save(function(err, reserva) {
+                        if (err) return next({ message: "Erro ao criar reserva", err: err });
+                        res.json({ message: "Reserva criada com sucesso", reserva: reserva });
+                    });
+
+                });
+            } else {
+                return res.json({ message: 'O prato não existe' });
+            }
         });
     } catch (err) {
         return res.json({ message: 'Error', error: err });

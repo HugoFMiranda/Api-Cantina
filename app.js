@@ -14,8 +14,8 @@ var reserva = require('./models/reserva');
 
 /* Importing the routes from the routes folder. */
 var indexRouter = require('./routes/index');
-var ementasemanaRouter = require('./routes/ementa');
-var pratododiaRouter = require('./routes/prato');
+var ementasemanaRouter = require('./routes/ementasemana');
+var pratododiaRouter = require('./routes/pratododia');
 var reservaRouter = require('./routes/reserva');
 
 var app = express();

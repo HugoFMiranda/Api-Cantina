@@ -3,6 +3,9 @@ var Schema = mongoose.Schema;
 var Pratodia = require('./pratododia').schema;
 
 var EmentaSemanaSchema = new Schema({
+    id: {
+        type: Schema.Types.ObjectId
+    },
     data: {
         type: Date,
         required: true,
